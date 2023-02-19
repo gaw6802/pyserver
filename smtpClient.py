@@ -17,13 +17,16 @@ def webServer(port=13331):
     #Establish the connection
     
     print('Ready to serve...')
-    connectionSocket, addr = #Fill in start -are you accepting connections?     #Fill in end
+    connectionSocket, addr = serverSocket.accept()
+    #Fill in start -are you accepting connections?     #Fill in end
     
     try:
-      message = #Fill in start -a client is sending you a message   #Fill in end 
+      message = connectionSocket.recv(1024)
+      #Fill in start -a client is sending you a message   #Fill in end
       filename = message.split()[1]
-      
-      #opens the client requested file. 
+
+      outputdata = file.read()
+      #opens the client requested file.
       #Plenty of guidance online on how to open and read a file in python. How should you read it though if you plan on sending it through a socket?
       f = open(filename[1:], #fill in start #fill in end)
       #fill in end
@@ -41,19 +44,24 @@ def webServer(port=13331):
                
 
       #Send the content of the requested file to the client
-      for i in f: #for line in file
-        #Fill in start - send your html file contents #Fill in end 
+      for i in f(0,len(outputdata[i]): #for line in file
+                  connectionSocket.send(outputdata[i])
+      connectionSocket.send("\r\n")
+      #Fill in start  - send your html file contents #Fill in end
+
       connectionSocket.close() #closing the connection socket
       
     except Exception as e:
       # Send response message for invalid request due to the file not being found (404)
       #Fill in start
-
+      connectionSocket.send("HTTP/1.1 404 Not Found\r\n\r\n")
+      connectionSocket.send("<html><head></head><body><h1>404 Not Found</h1></body></html>\r\n")
       #Fill in end
 
 
       #Close client socket
       #Fill in start
+      connectionSocket.close()
 
       #Fill in end
 
