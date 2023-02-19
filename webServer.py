@@ -2,12 +2,16 @@
 from socket import *
 # In order to terminate the program
 import sys
+HOST = '127.0.0.1' #localhost
+
+
+
 
 def webServer(port=13331):
   serverSocket = socket(AF_INET, SOCK_STREAM)
   
   #Prepare a server socket
-  serverSocket.bind(("127.0.0.1", port))
+  serverSocket.bind((HOST, port))
   
   #Fill in start
   serverSocket.listen(1)
@@ -39,9 +43,23 @@ def webServer(port=13331):
       #Send an HTTP header line into socket for a valid request. What header should be sent for a response that is ok? 
       #Note that a complete header must end with a blank line, creating the four-byte sequence "\r\n\r\n" Refer to https://w3.cs.jmu.edu/kirkpams/OpenCSF/Books/csf/html/TCPSockets.html
       #Fill in start
+      def handle_request(client_socket):
+        request_data=client_socket.recv(1024)
+        request_test=request_data.decode()
+        print(request_test)
 
+        response_headers = 'HTTP/1.1 200 OK\nContent-Type: text/html\n\n'
+        with open('index.html','r') as f:
+          response_body = f.read()
+          response = response_headers + response_body
+          response_data = response.encode()
+
+          client_socket.sendall(response_data)
+          client_socket.close()
+
+        handle_request(client_socket)
       #Fill in end
-               
+
 
       #Send the content of the requested file to the client
       for i in f(0,len(outputdata[i]): #for line in file
